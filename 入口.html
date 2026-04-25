@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大萌神！</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            overflow: auto;
+            background: linear-gradient(to bottom, #1a73e8 0%, #ffffff 50%, #fbbc05 100%);
+            background-attachment: fixed;
+            background-size: cover;
+            color: #f0f0f0;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(100, 149, 237, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(251, 188, 5, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(52, 168, 83, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 60% 20%, rgba(26, 115, 232, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #1a73e8, #9ca3af, #fbbc05);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            color: #f0f9ff;
+            text-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.4),
+                0 0 15px rgba(26, 115, 232, 0.8),
+                0 0 20px rgba(26, 115, 232, 0.5);
+            background: rgba(26, 115, 232, 0);
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 60px;
+            color: #000000;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 28%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-20px) translateX(-50%); }
+            60% { transform: translateY(-10px) translateX(-50%); }
+        }
+
+        .scroll-indicator i {
+            font-size: 2rem;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(26, 115, 232, 0.5);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .description {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(26, 115, 232, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(251, 188, 5, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(251, 188, 5, 0.7);
+        }
+
+        .button-container {
+            position: absolute;
+            bottom: 15%;
+            display: inline-block;
+        }
+
+        .storm-button {
+            position: relative;
+            display: inline-block;
+            padding: 20px 60px;
+            background: linear-gradient(135deg, #ffffff 0%, #1a73e8 100%);
+            background-size: 200% 200%;
+            color: #333333;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 8px;
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.2),
+                0 4px 8px rgba(26, 115, 232, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+
+        .storm-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to right, 
+                transparent, 
+                rgba(255, 255, 255, 0.15), 
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: storm var(--animation-speed, 4s) infinite linear;
+        }
+
+        @keyframes storm {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .storm-button:hover {
+            background-position: 100% 100%;
+            transform: translateY(-3px);
+            box-shadow: 
+                0 12px 24px rgba(0, 0, 0, 0.25),
+                0 6px 12px rgba(212, 167, 106, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .storm-button:active {
+            transform: translateY(0);
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.2),
+                0 2px 4px rgba(212, 167, 106, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .button-text {
+            position: relative;
+            z-index: 2;
+            text-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                0 0 8px rgba(212, 167, 106, 0.4);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .storm-button {
+                padding: 16px 48px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .storm-button {
+                padding: 14px 36px;
+                font-size: 14px;
+                letter-spacing: 1px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1 class="title" id="pageTitle">大萌神！</h1>
+            <h2 class="subtitle" id="pageSubtitle">由@冰雪的王爵独家冠名</h2>
+            <p class="description" id="pageDescription">
+                技术栈：AI+HTML5+CSS3+JavaScript+（Font Awesome）<br>
+                <br>
+                功能详情：<br>
+                分类导航 ：健身 风景 运动 动漫四大分区，<br>
+                实现搜索，分类，收藏（本地存储），卡片展示，<br>
+                详细内容介绍，瀑布式图片，编辑页面文字内容，<br>
+                讨论的举报删除回复发送，上传视频，返回页面状态不变等功能
+            </p>
+        </div>
+        <div class="scroll-indicator" id="scrollIndicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+
+        <div class="button-container">
+          <a href="#" class="storm-button" onclick="navigateToPage()">
+            <span class="button-text">跳转按钮</span>
+          </a>
+          </div>
+    </div>
+
+    <script>
+        // 可修改的配置
+        const config = {
+            title: "大萌神！",
+            subtitle: "由@冰雪的王爵独家冠名",
+            description: "技术栈：AI+HTML5+CSS3+JavaScript+（Font Awesome）\n\n功能详情：\n分类导航 ：健身 风景 运动 动漫四大分区，\n实现搜索，分类，收藏（本地存储），卡片展示，\n详细内容介绍，瀑布式图片，编辑页面文字内容，\n讨论的举报删除回复发送，上传视频，返回页面状态不变等功能",
+            backgroundColor: "linear-gradient(to bottom, #1a73e8 0%, #ffffff 50%, #fbbc05 100%)",
+            titleColor: "#7dd3fc",
+            subtitleColor: "#f0f9ff",
+            descriptionColor: "#000000"
+        };
+
+        // 应用配置
+        document.getElementById('pageTitle').textContent = config.title;
+        document.getElementById('pageTitle').style.color = config.titleColor;
+        document.getElementById('pageSubtitle').textContent = config.subtitle;
+        document.getElementById('pageSubtitle').style.color = config.subtitleColor;
+        document.getElementById('pageDescription').textContent = config.description;
+        document.getElementById('pageDescription').style.color = config.descriptionColor;
+        document.body.style.background = config.backgroundColor;
+
+        // 滚动效果
+        document.getElementById('scrollIndicator').addEventListener('click', function() {
+            window.scrollTo({
+                top: window.innerHeight,
+                behavior: 'smooth'
+            });
+        });
+
+        // 滚动时的视觉效果
+        window.addEventListener('scroll', function() {
+            const scrollY = window.scrollY;
+            const opacity = Math.max(0, 1 - scrollY / 300);
+            document.getElementById('scrollIndicator').style.opacity = opacity;
+        });
+
+
+        // 按钮配置
+        // 可修改的配置
+          const buttonConfig = {
+            text: "跳转按钮",
+            href: "./动漫.html", // 跳转链接
+            animationSpeed: 4, // 风暴动画速度（秒）
+            hoverEffect: true, // 悬停效果
+            activeEffect: true // 点击效果
+          };
+
+          // 应用配置
+          document.querySelector('.button-text').textContent = buttonConfig.text;
+          document.querySelector('.storm-button').setAttribute('href', buttonConfig.href);
+
+          // 跳转函数
+          function navigateToPage() {
+            // 这里可以添加跳转逻辑
+            console.log('跳转到:', buttonConfig.href);
+            // 实际应用中，浏览器会自动处理跳转
+          }
+
+          // 动态调整动画速度
+          document.querySelector('.storm-button').style.setProperty('--animation-speed', buttonConfig.animationSpeed + 's');
+    </script>
+</body>
+</html>
