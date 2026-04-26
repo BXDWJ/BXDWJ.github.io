@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大萌神！</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            transition: background 1s ease;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 182, 193, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 40% 40%, rgba(224, 247, 250, 0.3) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+
+
+        .star {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); box-shadow: 0 0 10px white; }
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid rgba(128, 222, 234, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 172, 193, 0.1);
+        }
+
+        .logo {
+            font-size: 31px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00e8ff 0%, #ff6080 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;  
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 10px rgba(0, 172, 193, 0.2);
+            opacity: 1;
+            transition: transform 0.3s ease;
+            transform: translateY(-50%);
+        }
+        
+        .logo:hover {
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        
+
+        .nav-buttons {
+            position: absolute;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-buttons-left {
+            position: absolute;
+            top: 50%;
+            left: 200px;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            color: #00838f;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 10px rgba(0, 172, 193, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            position: relative;
+            overflow: hidden;
+            filter: brightness(100%) saturate(0.8);
+            white-space: nowrap;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 1s;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .nav-btn:hover {
+            background: rgba(245, 245, 245, 0.8);
+            color: #0d0d0d;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 172, 193, 0.2);
+            filter: brightness(100%) saturate(0.8);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #ffb6c1 0%, #f48fb1 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
+            filter: brightness(100%) saturate(0.8);
+        }
+
+        .nav-link {
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-content {
+            padding-top: 100px;
+            padding-bottom: 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 25px;
+            border: 2px solid transparent;
+            border-radius: 30px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.65);
+            box-shadow: 0 5px 20px rgba(0, 172, 193, 0.15), inset 0 2px 5px rgba(0, 0, 0, 0.02);
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(90%);
+        }
+
+        .search-input:focus {
+            border-color: rgba(0, 172, 193, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 172, 193, 0.25), 0 0 0 4px rgba(0, 172, 193, 0.1);
+            transform: scale(1.02);
+        }
+
+        .anime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .anime-card {
+            background: rgba(245, 245, 245, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 
+                0 4px 6px rgba(0, 0, 0, 0.05),
+                0 1px 3px rgba(0, 0, 0, 0.1),
+                0 10px 20px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .anime-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .anime-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00acc1, #f48fb1);
+            transform: translateY(4px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .anime-card:hover::before {
+            opacity: 1;
+        }
+
+        .anime-card:hover::after {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .anime-card:hover {
+            transform: translateY(-8px) rotateX(5deg) rotateY(2deg);
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.15),
+                0 10px 15px rgba(0, 0, 0, 0.1),
+                0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .anime-card img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            filter: brightness(90%);
+            opacity: 0.9;
+        }
+
+        .anime-card:hover img {
+            transform: none;
+            filter: brightness(100%);
+            opacity: 1;
+        }
+
+        .anime-info {
+            padding: 15px;
+        }
+
+        .anime-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .anime-card:hover .anime-title {
+            color: #0d0d0d;
+        }
+
+        .detail-page {
+            padding: 0 30px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            /* background: rgba(254, 254, 254, 0.8); */
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #00acc1;
+            margin-bottom: 30px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 172, 193, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transition: left 0.3s;
+        }
+
+        .back-btn:hover::before {
+            left: 100%;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-8px);
+            box-shadow: 0 8px 25px rgba(0, 172, 193, 0.3);
+            background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);
+        }
+
+        .plane-icon {
+            font-size: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-block;
+        }
+
+        .back-btn:hover .plane-icon {
+            transform: scale(1.2);
+            animation: snowfall 1s ease infinite alternate;
+        }
+
+        @keyframes snowfall {
+            from { transform: scale(1.2) translateY(0); }
+            to { transform: scale(1.2) translateY(5px); }
+        }
+
+        .detail-content {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 40px;
+            background: rgba(245, 245, 245, 0.5);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0s ease;
+            -webkit-transition: all 0s ease;
+        }
+
+        .detail-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .detail-poster {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 172, 193, 0.2);
+        }
+
+        .detail-info {
+            margin-top: 30px;
+        }
+
+        .detail-info h1 {
+            color: #1a1a1a;
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .detail-info p {
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .detail-meta {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffb6c1;
+        }
+
+        .meta-label {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 70px;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .action-btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .favorite-btn {
+            background: #f48fb1;
+            color: white;
+            box-shadow: 0 3px 10px rgba(244, 143, 177, 0.3);
+        }
+
+        .favorite-btn:hover {
+            background: #ec407a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(236, 64, 122, 0.4);
+        }
+
+        .favorite-btn.favorited {
+            background: #d81b60;
+            box-shadow: 0 3px 10px rgba(216, 27, 96, 0.4);
+        }
+
+        .watch-btn {
+            background: #00acc1;
+            color: white;
+            box-shadow: 0 3px 10px rgba(0, 172, 193, 0.3);
+        }
+
+        .watch-btn:hover {
+            background: #00838f;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 131, 143, 0.4);
+        }
+
+        .favorites-page {
+            padding: 0 20px;
+            position: relative;
+            min-height: 80vh;
+        }
+
+        .empty-favorites {
+            text-align: center;
+            padding: 150px 40px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            max-width: 600px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+        }
+
+        .empty-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: float-icon 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes float-icon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .empty-text {
+            background: linear-gradient(135deg, #00acc1 0%, #ffb6c1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 900px) {
+            .detail-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-poster {
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 10px;
+            }
+            
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .anime-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .anime-card img {
+                height: 200px;
+            }
+            
+            .detail-content {
+                padding: 20px;
+            }
+            
+            .detail-info h1 {
+                font-size: 24px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        .sponsor-wrapper {
+            flex: 1;
+            text-align: center;
+        }
+
+        .sponsor-link {
+            display: inline-block;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(90deg, #ffffff, #003366);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientFlow 4s ease infinite;
+            transition: transform 0.3s ease;
+            filter: brightness(0.3);
+        }
+
+        .sponsor-link:hover {
+            transform: none;
+            filter: brightness(1);
+        }
+
+        @keyframes gradientFlow {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .back-a{
+            text-decoration: none;
+            margin-left: 20px;
+            letter-spacing: -2px;
+        }
+
+        .category-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 0 20px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .category-btn {
+            padding: 16px 30px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(245, 245, 245, 0.8);
+            color: #1a1a1a;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            filter: brightness(100%);
+        }
+
+        .category-btn:hover {
+            background: rgba(245, 245, 245, 1);
+            color: #1a1a1a;
+            filter: brightness(100%);
+        }
+
+        .category-btn.active {
+            background: #f48fb1;
+            color: white;
+            box-shadow: 0 4px 12px rgba(244, 143, 177, 0.3);
+            transform: translateY(-2px);
+            filter: brightness(100%);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            min-width: 150px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 172, 193, 0.2);
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .dropdown-menu a {
+            color: #00acc1;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            color: #00838f;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown:hover .dropdown-toggle {
+            background: linear-gradient(135deg, #ffb6c1 0%, #f48fb1 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 15% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 400px;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 172, 193, 0.3);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content h3 {
+            color: #00acc1;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .modal-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+        }
+
+        .modal-btn.confirm {
+            background: linear-gradient(135deg, #b2ebf2 0%, #80deea 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(178, 235, 242, 0.4);
+        }
+
+        .modal-btn.confirm:hover {
+            background: linear-gradient(135deg, #80deea 0%, #4dd0e1 100%);
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(178, 235, 242, 0.5);
+        }
+
+        .modal-btn.cancel {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            color: #00838f;
+            box-shadow: 0 4px 15px rgba(0, 172, 193, 0.15);
+        }
+
+        .modal-btn.cancel:hover {
+            background: linear-gradient(135deg, #b2ebf2 0%, #80deea 100%);
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 172, 193, 0.25);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="star" style="top: 15%; left: 10%; animation-delay: 0s;"></div>
+    <div class="star" style="top: 25%; left: 85%; animation-delay: 0.5s;"></div>
+    <div class="star" style="top: 45%; left: 20%; animation-delay: 1s;"></div>
+    <div class="star" style="top: 65%; left: 90%; animation-delay: 1.5s;"></div>
+    <div class="star" style="top: 75%; left: 5%; animation-delay: 2s;"></div>
+    <div class="star" style="top: 35%; left: 70%; animation-delay: 2.5s;"></div>
+
+    <nav class="navbar">
+        <div class="logo" style="position: absolute; top: 50%; left: 30px;">
+            <a href="入口.html" class="back-a">大萌神！</a>
+        </div>
+
+
+        <div class="sponsor-wrapper">
+          <a href="./赞助广告/赞助广告.html" class="sponsor-link">由@冰雪的王爵独家冠名:大萌神！</a>
+        </div>
+
+
+        <div class="nav-buttons-left">
+                <a href="./欢迎赞助/欢迎赞助/欢迎赞助.html" class="nav-btn nav-link">欢迎赞助</a>
+                <a href="./欢迎合作/欢迎合作/欢迎合作.html" class="nav-btn nav-link">欢迎合作</a>
+        </div>
+
+
+        <div class="nav-buttons">
+                <button class="nav-btn active" data-page="home">分类</button>
+                <div class="dropdown">
+                    <button class="nav-btn dropdown-toggle" data-page="favorites">收藏</button>
+                    <div class="dropdown-menu">
+                        <a href="#" onclick="clearAllFavorites()">一键删除收藏</a>
+                    </div>
+                </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="page active" id="home-page">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="🔍 搜索你喜欢的内容..." id="search-input">
+            </div>
+            <div class="category-nav">
+                <button class="category-btn active" data-category="all">全部</button>
+                <button class="category-btn" data-category="动漫">动漫</button>
+                <button class="category-btn" data-category="运动">运动</button>
+                <button class="category-btn" data-category="健身">健身</button>
+                <button class="category-btn" data-category="风景">风景</button>
+                <button class="category-btn" data-category="其他">其他</button>
+            </div>
+            <div class="anime-grid" id="anime-grid"></div>
+        </div>
+
+        <div class="page" id="detail-page">
+            <div class="detail-page">
+                <button class="back-btn" onclick="goHome()">
+                    <span class="plane-icon">❄️</span>
+                    返回首页
+                </button>
+                <div class="detail-content" id="detail-content"></div>
+            </div>
+        </div>
+
+        <div class="page" id="favorites-page">
+            <div class="favorites-page">
+                <div class="anime-grid" id="favorites-grid"></div>
+                <div class="empty-favorites" id="empty-favorites" style="display: none;">
+                    <div class="empty-icon">💫</div>
+                    <div class="empty-text">还没有收藏哦~快去添加喜欢的动漫吧！</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 确认模态框 -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content">
+            <h3>确定删除所有收藏？</h3>
+            <div class="modal-buttons">
+                <button class="modal-btn confirm" onclick="confirmClearFavorites()">确定</button>
+                <button class="modal-btn cancel" onclick="closeModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const animeData = [
+            {
+                id: 1,
+                title: '幸运星',
+                image: '../图片库/网站搭建图片/动漫/幸运星/06a511a5842355500c359c3ab146ddfb.png',
+                category: '动漫',
+                description: '在日本的一座深山小镇里，高中女生三叶每天都过着忧郁的生活，而她的梦想就是能够成为东京的一名帅哥。某天，她真的在梦中变成了东京的一名男高中生的模样，开始了她全新的生活。',
+                link: './动漫分区/幸运星.html'
+            },
+            {
+                id: 2,
+                title: 'CLANNAD',
+                image: '../图片库/网站搭建图片/动漫/CLANNAD/2805c83f8d2fb777abcb5c481d7e9a11.jpeg',
+                category: '动漫',
+                description: '小月的母亲生病住院了，父亲带着她与四岁的妹妹小梅到乡间的居住。她们对那里的环境都感到十分新奇，也发现了很多有趣的事情。',
+                link: './动漫分区/CLANNAD.html'
+            },
+            {
+                id: 3,
+                title: '双子星公主',
+                image: '../图片库/网站搭建图片/动漫/双子星公主/71ff6351c6e7c7914a08d906175e6725.png',
+                category: '动漫',
+                description: '10岁的少女千寻与父母一起从都市搬家到了乡下。没想到在搬家的途中，一家人发生了意外。他们进入了汤屋老板魔女控制的奇特世界——在那里不劳动的人将会被变成动物。',
+                link: './动漫分区/双子星公主.html'
+            },
+            {
+                id: 4,
+                title: '紫罗兰的永恒花园',
+                image: '../图片库/网站搭建图片/动漫/紫罗兰的永恒花园/93c6b1227876a1ad219b3644da449fd9.jpeg',
+                category: '动漫',
+                description: '主人公少女希达和少年巴鲁以及海盗、军队、穆斯卡等寻找天空之城拉普达的历险记。',
+                link: './动漫分区/紫罗兰的永恒花园.html'
+            },
+            {
+                id: 5,
+                title: '进击的巨人',
+                image: '../图片库/网站搭建图片/动漫/进击的巨人/1343ef4d6521d86c87c8e8abffbd4aca.png',
+                category: '动漫',
+                description: '阿席达卡为了寻求解除诅咒的方法，来到了西方的铁镇。在那里，他遇到了被人类赶出森林的幽灵公主珊。',
+                link: './动漫分区/进击的巨人.html'
+            },
+            {
+                id: 6,
+                title: '变态王子与不笑猫',
+                image: '../图片库/网站搭建图片/动漫/变态王子与不笑猫/e421ebdde81b74ea1b1aa54810aa75f9.png',
+                category: '动漫',
+                description: '少女苏菲被荒野女巫变成了老太婆，她偶然进入了移动城堡，与魔法师哈尔相遇，开始了一段奇妙的冒险。',
+                link: './动漫分区/变态王子与不笑猫.html'
+            },
+            {
+                id: 7,
+                title: '轻音少女',
+                image: '../图片库/网站搭建图片/动漫/轻音少女/85c25ae93adc7b9ec3b28ef2683c87db.png',
+                category: '动漫',
+                description: '讲述了一个为了守护风之谷而勇敢战斗的公主娜乌西卡的故事。',
+                link: './动漫分区/轻音少女.html'
+            },
+            {
+                id: 8,
+                title: '孤独摇滚',
+                image: '../图片库/网站搭建图片/动漫/孤独摇滚/df23b57d9708f7fe9416c06aa75ccc9a.png',
+                category: '动漫',
+                description: '13岁的魔女琪琪带着黑猫吉吉来到海边城市，开始了她的魔女修行之旅。',
+                link: './动漫分区/孤独摇滚.html'
+            },
+            {
+                id: 9,
+                title: '足球',
+                image: '../图片库/网站搭建图片/运动/足球/a008908ec2f268f05425a5b9f1304afe.png',
+                category: '运动',
+                description: '一场激烈的足球比赛，球员们在场上奋力拼搏，展现了运动的魅力。',
+                link: './运动分区/足球.html'
+            },
+            {
+                id: 10,
+                title: '篮球',
+                image: '../图片库/网站搭建图片/运动/篮球/2046894dc4c1289501f7f9d48f726ace.jpeg',
+                category: '运动',
+                description: '篮球队员们正在进行刻苦的训练，为即将到来的比赛做准备。',
+                link: './运动分区/篮球.html'
+            },
+            {
+                id: 11,
+                title: '跑步',
+                image: '../图片库/网站搭建图片/运动/跑步/20173fd78d5018641f8d3a2ff6255936.png',
+                category: '运动',
+                description: '马拉松选手们在比赛中展现出了顽强的毅力和拼搏精神。',
+                link: './运动分区/跑步.html'
+            },
+            {
+                id: 12,
+                title: '俯卧撑',
+                image: '../图片库/网站搭建图片/健身/俯卧撑/1a968cc60ce0cae0ba43274d935e0d3c.png',
+                category: '健身',
+                description: '人们在健身房里进行各种锻炼，保持身体健康。',
+                link: './健身分区/俯卧撑.html'
+            },
+            {
+                id: 13,
+                title: '跑步机',
+                image: '../图片库/网站搭建图片/健身/跑步机/36d4a92c729bca840019f552b87f07cd.jpeg',
+                category: '健身',
+                description: '瑜伽爱好者在安静的环境中进行瑜伽练习，修身养性。',
+                link: './健身分区/跑步机.html'
+            },
+            {
+                id: 18,
+                title: '哑铃',
+                image: '../图片库/网站搭建图片/健身/哑铃/c2dd619dc15c0a54b87d412cc49cf7a8.png',
+                category: '健身',
+                description: '使用哑铃进行力量训练，增强肌肉力量。',
+                link: './健身分区/哑铃.html'
+            },
+            {
+                id: 19,
+                title: '仰卧起坐',
+                image: '../图片库/网站搭建图片/健身/仰卧起坐/61653d1330491b355dfaabcb43752a60.png',
+                category: '健身',
+                description: '仰卧起坐是锻炼腹部肌肉的经典动作。',
+                link: './健身分区/仰卧起坐.html'
+            },
+            {
+                id: 20,
+                title: '引体向上',
+                image: '../图片库/网站搭建图片/健身/引体向上/5d014296eb3f58e8d7f2387427e86144.png',
+                category: '健身',
+                description: '引体向上是锻炼背部和手臂肌肉的有效方式。',
+                link: './健身分区/引体向上.html'
+            },
+            {
+                id: 21,
+                title: '乒乓球',
+                image: '../图片库/网站搭建图片/运动/乒乓球/0c22877c635533730e1e444ca7b5c481.png',
+                category: '运动',
+                description: '一场精彩的乒乓球比赛，选手们展现了高超的技巧和敏捷的反应。',
+                link: './运动分区/乒乓球.html'
+            },
+            {
+                id: 22,
+                title: '跳绳',
+                image: '../图片库/网站搭建图片/运动/跳绳/ca9bc0b5855e838fb291d8e2dd813da5.png',
+                category: '运动',
+                description: '跳绳爱好者在进行高强度的跳绳训练，提高身体协调性。',
+                link: './运动分区/跳绳.html'
+            },
+            {
+                id: 23,
+                title: '羽毛球',
+                image: '../图片库/网站搭建图片/运动/羽毛球/77d41fa87300f74e88d04a05e00717bc.jpeg',
+                category: '运动',
+                description: '一场激烈的羽毛球比赛，选手们展现了精准的控球和快速的反应。',
+                link: './运动分区/羽毛球.html'
+            },
+            {
+                id: 24,
+                title: '排球',
+                image: '../图片库/网站搭建图片/运动/排球/5f6974fb1e2dc8b7f0b5c9924e20ee5b.png',
+                category: '运动',
+                description: '一场精彩的排球比赛，队员们展现了默契的配合和出色的技巧。',
+                link: './运动分区/排球.html'
+            },
+            {
+                id: 25,
+                title: '海',
+                image: '../图片库/网站搭建图片/风景/海/d51ffa6f3d1bcd44b5e807b0379d05f6.jpeg',
+                category: '风景',
+                description: '蔚蓝的大海与天空相接，海浪轻轻拍打着沙滩，海鸥在天空中自由翱翔，带来宁静与放松的感觉。',
+                link: './风景分区/海.html'
+            },
+            {
+                id: 26,
+                title: '蓝天',
+                image: '../图片库/网站搭建图片/风景/蓝天/8952e58cf35565f86e478f91b06460af.png',
+                category: '风景',
+                description: '澄澈的蓝天如洗，白云朵朵飘浮，阳光明媚而温暖，让人感受到大自然的纯净与美好。',
+                link: './风景分区/篮天.html'
+            },
+            {
+                id: 27,
+                title: '沙漠',
+                image: '../图片库/网站搭建图片/风景/沙漠/0b94aab8b8e813e8855cbca162b61cf5.jpeg',
+                category: '风景',
+                description: '广袤无垠的沙漠，金色的沙丘连绵起伏，在夕阳的映照下呈现出迷人的色彩，展现着大自然的壮丽与神秘。',
+                link: './风景分区/沙漠.html'
+            },
+            {
+                id: 28,
+                title: '山',
+                image: '../图片库/网站搭建图片/风景/山/5887bda77f69129004056a571356ae33.jpeg',
+                category: '风景',
+                description: '巍峨的山峰直插云霄，苍翠的森林覆盖山坡，清新的空气和壮丽的景色让人心旷神怡，感受大自然的鬼斧神工。',
+                link: './风景分区/山.html'
+            },
+            {
+                id: 29,
+                title: '晚霞',
+                image: '../图片库/网站搭建图片/风景/晚霞/7a0da6195dc59f8602324ddd981a6541.png',
+                category: '风景',
+                description: '绚丽的晚霞染红天际，橙红色的云彩如同燃烧的火焰，为一天的结束画上完美的句号，带来温暖与希望。',
+                link: './风景分区/晚霞.html'
+            },
+            {
+                id: 30,
+                title: '敬请期待',
+                image: '',
+                category: '其他',
+                description: '更多精彩内容即将上线，敬请期待！',
+                link: './动漫网页分区/网页一/双子星公主.html'
+            }
+        ];
+
+        let favorites = JSON.parse(localStorage.getItem('skyanime-favorites')) || [];
+        let currentCategory = 'all';
+
+        let showAll = false;
+
+        let pageState = {
+            category: 'all',
+            searchQuery: '',
+            scrollPosition: 0,
+            showAll: false
+        };
+
+        // 存储随机排序后的数据，页面初始化时随机一次后就固定
+        let shuffledAnimeData = null;
+
+
+
+        // 设置分类背景
+        function setCategoryBackground(category) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('../图片库/网站搭建图片/风景/ed9f8b3ce3c3b993d1634d437077733a.jpeg')`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
+            document.body.style.backgroundAttachment = 'fixed';
+        }
+
+        function renderAnimeGrid(container, data) {
+            let displayData = data;
+            let showMoreButton = false;
+            let limit = 12;
+
+            // 根据分类设置不同的限制
+            if (currentCategory === 'all') {
+                limit = 16;
+            }
+
+            // 如果不是展开状态且数据超过限制，只显示限制数量
+            if (!showAll && data.length > limit) {
+                displayData = data.slice(0, limit - 1);
+                showMoreButton = true;
+            }
+
+            // 如果是"其他"分类且只有一个项目，使用居中布局
+            const isSingleOther = currentCategory === '其他' && displayData.length === 1;
+            
+            let html = displayData.map(anime => {
+                // 如果没有图片，显示居中的文字
+                if (!anime.image) {
+                    // 在"其他"分类中全高度显示（减去120px），在"全部"分类中普通高度显示
+                    const cardHeight = currentCategory === '其他' ? 'calc(100vh - 320px)' : '370px';
+                    return `
+                        <div class="anime-card" style="height: ${cardHeight}; width: 100%; display: flex; align-items: center; justify-content: center; cursor: default;">
+                            <div class="anime-title" style="font-size: 24px; text-align: center;">${anime.title}</div>
+                        </div>
+                    `;
+                }
+                return `
+                    <div class="anime-card" onclick="showDetail(${anime.id})">
+                        <img src="${anime.image}" alt="${anime.title}">
+                        <div class="anime-info">
+                            <div class="anime-title">${anime.title}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // 如果是单个"其他"项目，添加网格居中样式
+            if (isSingleOther) {
+                container.style.display = 'flex';
+                container.style.justifyContent = 'center';
+                container.style.alignItems = 'center';
+                container.style.gridTemplateColumns = '1fr';
+            } else {
+                container.style.display = 'grid';
+                container.style.justifyContent = '';
+                container.style.alignItems = '';
+                container.style.gridTemplateColumns = '';
+            }
+
+            // 添加展开全部按钮
+            if (showMoreButton) {
+                html += `
+                    <div class="anime-card show-more" onclick="toggleShowAll()">
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 20px;">
+                            <div class="anime-title">展开全部</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function toggleShowAll() {
+            showAll = !showAll;
+            const searchQuery = document.getElementById('search-input').value;
+            filterAnime(searchQuery);
+        }
+
+        function showDetail(id) {
+            const anime = animeData.find(a => a.id === id);
+            if (!anime) return;
+
+            const isFavorited = favorites.includes(id);
+            
+            pageState.category = currentCategory;
+            pageState.searchQuery = document.getElementById('search-input').value;
+            pageState.scrollPosition = window.scrollY;
+            pageState.showAll = showAll;
+            
+            localStorage.setItem('skyanime-pageState', JSON.stringify(pageState));
+            
+            console.log('保存状态:', pageState);
+            
+            switchPage('detail');
+            
+            document.getElementById('detail-content').innerHTML = `
+                <div>
+                    <img src="${anime.image}" alt="${anime.title}" class="detail-poster">
+                </div>
+                <div class="detail-info">
+                    <h1>${anime.title}</h1>
+                    <p>${anime.description}</p>
+                    <div class="action-buttons">
+                        <button class="action-btn favorite-btn ${isFavorited ? 'favorited' : ''}" onclick="toggleFavorite(${anime.id}, this)">
+                            ${isFavorited ? '已收藏' : '加入收藏'}
+                        </button>
+                        <button class="action-btn watch-btn" onclick="saveAndWatch('${anime.link}')">点击进入</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function saveAndWatch(link) {
+            pageState.category = currentCategory;
+            pageState.searchQuery = document.getElementById('search-input').value;
+            pageState.scrollPosition = window.scrollY;
+            pageState.showAll = showAll;
+            
+            localStorage.setItem('skyanime-pageState', JSON.stringify(pageState));
+            
+            console.log('保存状态并跳转:', pageState);
+            
+            window.location.href = link;
+        }
+
+        function toggleFavorite(id, btn) {
+            const index = favorites.indexOf(id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                btn.classList.remove('favorited');
+                btn.innerHTML = '加入收藏';
+            } else {
+                favorites.push(id);
+                btn.classList.add('favorited');
+                btn.innerHTML = '已收藏';
+            }
+            localStorage.setItem('skyanime-favorites', JSON.stringify(favorites));
+            renderFavorites();
+        }
+
+        function goHome() {
+            console.log('恢复状态前:', pageState);
+            
+            currentCategory = pageState.category;
+            showAll = pageState.showAll;
+            
+            document.getElementById('search-input').value = pageState.searchQuery;
+            
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-category="${currentCategory}"]`).classList.add('active');
+            
+            filterAnime(pageState.searchQuery);
+            
+            switchPage('home');
+            
+            console.log('恢复状态后 - 分类:', currentCategory, '搜索:', pageState.searchQuery, '滚动位置:', pageState.scrollPosition);
+            
+            localStorage.removeItem('skyanime-pageState');
+            
+            setTimeout(() => {
+                window.scrollTo({
+                    top: pageState.scrollPosition,
+                    behavior: 'instant'
+                });
+            }, 50);
+        }
+
+        function switchPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+            if (page === 'home') {
+                document.getElementById('home-page').classList.add('active');
+                document.querySelector('[data-page="home"]').classList.add('active');
+            } else if (page === 'detail') {
+                document.getElementById('detail-page').classList.add('active');
+            } else if (page === 'favorites') {
+                document.getElementById('favorites-page').classList.add('active');
+                document.querySelector('[data-page="favorites"]').classList.add('active');
+                renderFavorites();
+            }
+        }
+
+        function renderFavorites() {
+            const favoritesData = animeData.filter(a => favorites.includes(a.id));
+            const grid = document.getElementById('favorites-grid');
+            const empty = document.getElementById('empty-favorites');
+            
+            if (favoritesData.length === 0) {
+                grid.style.display = 'none';
+                empty.style.display = 'block';
+            } else {
+                grid.style.display = 'grid';
+                empty.style.display = 'none';
+                renderAnimeGrid(grid, favoritesData);
+            }
+        }
+
+        function clearAllFavorites() {
+            document.getElementById('confirm-modal').style.display = 'block';
+        }
+
+        function confirmClearFavorites() {
+            favorites = [];
+            localStorage.setItem('skyanime-favorites', JSON.stringify(favorites));
+            renderFavorites();
+            closeModal();
+            showAlert('所有收藏已删除');
+        }
+
+        function closeModal() {
+            document.getElementById('confirm-modal').style.display = 'none';
+        }
+
+        function showAlert(message) {
+            // 创建一个简单的提示框
+            const alertBox = document.createElement('div');
+            alertBox.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(255, 255, 255, 0.95);
+                padding: 20px 30px;
+                border-radius: 15px;
+                box-shadow: 0 10px 40px rgba(0, 172, 193, 0.3);
+                z-index: 2001;
+                text-align: center;
+                color: #00acc1;
+                font-weight: 500;
+                animation: fadeIn 0.3s ease;
+            `;
+            alertBox.textContent = message;
+            document.body.appendChild(alertBox);
+            
+            // 3秒后自动消失
+            setTimeout(() => {
+                alertBox.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(alertBox);
+                }, 300);
+            }, 3000);
+        }
+
+        // 添加淡出动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                to { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 添加滚动条样式
+        const scrollbarStyle = document.createElement('style');
+        scrollbarStyle.textContent = `
+            /* WebKit 滚动条样式 */
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+            
+            ::-webkit-scrollbar-track {
+                background: rgba(0, 20, 40, 0.8);
+                border-radius: 4px;
+            }
+            
+            ::-webkit-scrollbar-thumb {
+                background: rgba(0, 172, 193, 0.5);
+                border-radius: 4px;
+            }
+            
+            ::-webkit-scrollbar-thumb:hover {
+                background: rgba(0, 172, 193, 0.7);
+            }
+            
+            /* Firefox 滚动条样式 */
+            * {
+                scrollbar-width: thin;
+                scrollbar-color: rgba(0, 172, 193, 0.5) rgba(0, 20, 40, 0.8);
+            }
+        `;
+        document.head.appendChild(scrollbarStyle);
+
+        // 随机排序函数，排除"其他"分类
+        function shuffleArray(array) {
+            // 分离"其他"分类和其他分类
+            const otherCategory = array.filter(anime => anime.category === '其他');
+            const otherCategories = array.filter(anime => anime.category !== '其他');
+            
+            // 对其他分类进行随机排序
+            const shuffledCategories = [...otherCategories];
+            for (let i = shuffledCategories.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledCategories[i], shuffledCategories[j]] = [shuffledCategories[j], shuffledCategories[i]];
+            }
+            
+            // 将"其他"分类放在最后
+            return [...shuffledCategories, ...otherCategory];
+        }
+
+        function filterAnime(query) {
+            let filtered = currentCategory === 'all' ? (shuffledAnimeData || animeData) : animeData;
+            
+            // 先按分类筛选
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(anime => anime.category === currentCategory);
+            }
+            
+            // 再按搜索关键词筛选
+            if (query) {
+                filtered = filtered.filter(anime => 
+                    anime.title.toLowerCase().includes(query.toLowerCase()) ||
+                    anime.category.toLowerCase().includes(query.toLowerCase())
+                );
+            }
+            
+            renderAnimeGrid(document.getElementById('anime-grid'), filtered);
+        }
+
+        function handleCategoryClick(category) {
+            currentCategory = category;
+            showAll = false; // 切换分类时重置展开状态
+            
+            // 更新分类按钮的激活状态
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-category="${category}"]`).classList.add('active');
+            
+            // 重新筛选动漫
+            const searchQuery = document.getElementById('search-input').value;
+            filterAnime(searchQuery);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 页面初始化时生成随机排序的数据
+            shuffledAnimeData = shuffleArray(animeData);
+            
+            const savedState = localStorage.getItem('skyanime-pageState');
+            
+            if (savedState) {
+                try {
+                    const parsedState = JSON.parse(savedState);
+                    console.log('发现保存的状态:', parsedState);
+                    
+                    pageState = parsedState;
+                    currentCategory = pageState.category;
+                    showAll = pageState.showAll;
+                    
+                    document.getElementById('search-input').value = pageState.searchQuery;
+                    
+                    document.querySelectorAll('.category-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    document.querySelector(`[data-category="${currentCategory}"]`).classList.add('active');
+                    
+                    setCategoryBackground(currentCategory);
+                    
+                    filterAnime(pageState.searchQuery);
+                    
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: pageState.scrollPosition,
+                            behavior: 'instant'
+                        });
+                        console.log('状态恢复完成');
+                    }, 100);
+                    
+                    localStorage.removeItem('skyanime-pageState');
+                } catch (e) {
+                    console.error('恢复状态失败:', e);
+                    setCategoryBackground('all');
+                    filterAnime('');
+                }
+            } else {
+                setCategoryBackground('all');
+                filterAnime('');
+            }
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    switchPage(btn.dataset.page);
+                });
+            });
+
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    handleCategoryClick(btn.dataset.category);
+                });
+            });
+
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                filterAnime(e.target.value);
+            });
+        });
+    </script>
+</body>
+</html>
