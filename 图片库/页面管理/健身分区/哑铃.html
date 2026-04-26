@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>哑铃 - 健身指南</title>
+  <link rel="stylesheet" href="../网站css/页面css/base.css">
+  <link rel="stylesheet" href="../网站css/页面css/网页.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <nav class="nav-bar">
+      <div class="logo">
+        <a href="../入口.html" class="back-a">大萌神！</a>
+      </div>
+      <ul class="nav-list" id="navList"></ul>
+      <div class="sponsor-wrapper">
+        <a href="../赞助广告/赞助广告.html" class="sponsor-link">由@冰雪的王爵独家冠名:大萌神！</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <article class="article-card">
+      <header class="article-header">
+        <div class="title-row">
+          <h1 class="article-title" id="articleTitle"></h1>
+          <ul class="action-list" id="actionList"></ul>
+        </div>
+        <div class="subtitle-row">
+          <span class="subtitle" id="subtitle"></span>
+          <span class="divider">|</span>
+          <a href="#" class="expand-link" id="expandLink"></a>
+        </div>
+      </header>
+
+      <section class="gallery-section">
+        <div class="gallery" id="gallery"></div>
+      </section>
+    </article>
+
+    <section class="content-section" id="contentSection"></section>
+  </main>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <h2 class="modal-title">更多图片</h2>
+      <div class="waterfall-gallery" id="waterfallGallery"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="imageModalOverlay">
+    <div class="modal-content image-modal-content">
+      <div class="image-viewer" id="imageViewer"></div>
+    </div>
+  </div>
+
+  <script>
+    // 导航链接配置 - 修改这里即可更改链接
+    const navLinks = {
+            home: '../动漫.html',
+            sponsor: '../欢迎赞助/欢迎赞助/欢迎赞助.html',
+            cooperation: '../欢迎合作/欢迎合作/欢迎合作.html',
+            team: '../权威团队/权威团队/权威团队.html'
+        };
+
+    const pageData = {
+      nav: [
+        { text: '首页', href: navLinks.home },
+        { text: '欢迎赞助', href: navLinks.sponsor },
+        { text: '欢迎合作', href: navLinks.cooperation },
+        { text: '权威团队', href: navLinks.team }
+      ],
+      title: '哑铃',
+      actions: ['编辑', '讨论', '上传视频'],
+      subtitle: '力量训练器材指南',
+      expandText: '更多图片',
+      expandLink: '#',
+      images: [
+        { src: '../../图片库/网站搭建图片/健身/哑铃/0868c3f8e0c4abf5f5445319d0dd763f.png', alt: '哑铃图片1' },
+        { src: '../../图片库/网站搭建图片/健身/哑铃/1ae68bd7caa7ff555dd3b045e552b121.jpeg', alt: '哑铃图片2' },
+        { src: '../../图片库/网站搭建图片/健身/哑铃/2a5fd9c61885356fd31e15c21e137558.png', alt: '哑铃图片3' }
+      ],
+      moreImages: [
+        { src: '../../图片库/网站搭建图片/健身/哑铃/3f1b688f21b70a9853189db71f107001.png', alt: '哑铃图片4', height: 'tall' },
+        { src: '../../图片库/网站搭建图片/健身/哑铃/46736809d8e5b33947078c11193f4155.png', alt: '哑铃图片5', height: 'short' },
+        { src: '../../图片库/网站搭建图片/健身/哑铃/4e53f87dc100d10cc505e8e0d035afa0.png', alt: '哑铃图片6', height: 'medium' },
+        { src: '../../图片库/网站搭建图片/健身/哑铃/587a1f6453f1279438e54377eaf4b216.png', alt: '哑铃图片7', height: 'short' },
+        { src: '../../图片库/网站搭建图片/健身/哑铃/6cdb1895da2f1add9013b5372e6fef0b.png', alt: '哑铃图片8', height: 'tall' }
+      ],
+      content: [
+        {
+          text: '哑铃是一种常见的力量训练器材，由一根短杠和两端的重量盘组成。它是健身房和家庭健身中最常用的设备之一，适合各个年龄段的人群使用。哑铃的主要特点是灵活性高，可以进行多种不同的训练动作，锻炼全身各个部位的肌肉。'
+        },
+        {
+          text: '哑铃的种类包括：1. 固定重量哑铃：重量固定，适合初学者和家庭使用；2. 可调节哑铃：可以根据需要调整重量，适合进阶者；3. 六角哑铃：底部为六角形，放置稳定，不易滚动；4. 圆形哑铃：传统设计，使用广泛；5. 橡胶哑铃：外层包裹橡胶，减少噪音和磨损。'
+        },
+        {
+          text: '使用哑铃的好处包括：增强肌肉力量、改善肌肉耐力、提高身体协调性、增加肌肉质量、促进新陈代谢、改善骨密度。对于想要塑造肌肉线条的人来说，哑铃是一种非常有效的训练工具。'
+        },
+        {
+          text: '常见的哑铃训练动作：1. 哑铃弯举：锻炼肱二头肌；2. 哑铃推举：锻炼肩部肌肉；3. 哑铃卧推：锻炼胸肌；4. 哑铃划船：锻炼背部肌肉；5. 哑铃深蹲：锻炼腿部肌肉；6. 哑铃硬拉：锻炼全身肌肉；7. 哑铃侧平举：锻炼肩部外侧；8. 哑铃飞鸟：锻炼胸肌内侧。'
+        },
+        {
+          text: '选择哑铃时应考虑以下因素：1. 重量范围：根据自身力量水平选择；2. 材质：铸铁、橡胶、塑料等；3. 握把舒适度：确保握感良好；4. 稳定性：放置时是否稳定；5. 价格：根据预算选择合适的产品；6. 空间：考虑存放空间大小。'
+        },
+        {
+          text: '使用哑铃的注意事项：1. 选择合适的重量，避免过度负荷；2. 保持正确的动作姿势，避免受伤；3. 逐渐增加重量，遵循渐进超负荷原则；4. 做好热身和拉伸，减少肌肉拉伤风险；5. 注意呼吸节奏，避免憋气；6. 结合其他训练方式，全面发展身体素质。'
+        },
+        {
+          text: '无论您是想增肌、减脂还是保持健康，哑铃都是一种非常实用的健身工具。通过合理的训练计划和正确的动作姿势，您可以使用哑铃来达到各种健身目标。坚持定期训练，您会逐渐看到肌肉的变化，提高整体身体素质。'
+        }
+      ]
+    };
+
+    function renderNav(data) {
+      const navList = document.getElementById('navList');
+      navList.innerHTML = data.map(item => `
+                <li class="nav-item">
+                    <a href="${item.href}" class="nav-link">${item.text}</a>
+                </li>
+            `).join('');
+    }
+
+    function renderActions(data) {
+      const actionList = document.getElementById('actionList');
+      actionList.innerHTML = data.map(text => `
+                <li><button class="action-btn" data-action="${text}">${text}</button></li>
+            `).join('');
+
+      document.querySelectorAll('.action-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const action = btn.dataset.action;
+          handleAction(action);
+        });
+      });
+    }
+
+    function handleAction(action) {
+      switch (action) {
+        case '编辑':
+          const editModal = createActionModal('编辑内容', `
+                        <form id="editForm">
+                            <div class="form-group">
+                                <label>标题</label>
+                                <input type="text" id="editTitle" value="${document.getElementById('articleTitle').textContent}" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label>副标题</label>
+                                <input type="text" id="editSubtitle" value="${document.getElementById('subtitle').textContent}" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label>内容</label>
+                                <textarea id="editContent" class="form-textarea" rows="10">${pageData.content.map(c => c.text).join('\n\n')}</textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="form-cancel" id="editCancel">取消</button>
+                                <button type="submit" class="form-submit">保存</button>
+                            </div>
+                        </form>
+                    `);
+          document.body.appendChild(editModal);
+          document.getElementById('editForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            pageData.title = document.getElementById('editTitle').value;
+            pageData.subtitle = document.getElementById('editSubtitle').value;
+            const contentTexts = document.getElementById('editContent').value.split('\n\n').filter(text => text.trim() !== '');
+            pageData.content = contentTexts.map(text => ({ text }));
+            document.getElementById('articleTitle').textContent = pageData.title;
+            document.getElementById('subtitle').textContent = pageData.subtitle;
+            renderContent(pageData.content);
+
+            // 显示成功提示
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.textContent = '保存成功！';
+            editModal.querySelector('.action-modal-content').appendChild(successMessage);
+
+            setTimeout(() => {
+              successMessage.remove();
+              closeActionModal(editModal);
+            }, 1000);
+          });
+
+          document.getElementById('editCancel').addEventListener('click', () => {
+            closeActionModal(editModal);
+          });
+
+          openActionModal(editModal);
+          break;
+        case '讨论':
+          const discussModal = createActionModal('讨论区', `
+                        <div class="discuss-container">
+                            <div class="discuss-form">
+                                <textarea id="discussInput" class="form-textarea" placeholder="发表你的观点..." rows="3"></textarea>
+                                <div class="form-actions">
+                                    <button id="submitDiscuss" class="form-submit">发表评论</button>
+                                </div>
+                            </div>
+                            <div class="discuss-list" id="discussList">
+                                <div class="discuss-item">
+                                    <div class="discuss-avatar">用户A</div>
+                                    <div class="discuss-content">
+                                        <div class="discuss-header">
+                                            <div class="discuss-author">用户A</div>
+                                            <div class="discuss-time">2024-01-15 10:30</div>
+                                        </div>
+                                        <div class="discuss-text">哑铃训练可以精准锻炼目标肌群！</div>
+                                        <div class="discuss-actions">
+                                            <button class="discuss-reply-btn">回复</button>
+                                            <button class="discuss-report-btn">举报</button>
+                                            <button class="discuss-delete-btn">删除</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="discuss-item">
+                                    <div class="discuss-avatar">用户B</div>
+                                    <div class="discuss-content">
+                                        <div class="discuss-header">
+                                            <div class="discuss-author">用户B</div>
+                                            <div class="discuss-time">2024-01-14 15:20</div>
+                                        </div>
+                                        <div class="discuss-text">家用哑铃一套就够，健身非常方便！</div>
+                                        <div class="discuss-actions">
+                                            <button class="discuss-reply-btn">回复</button>
+                                            <button class="discuss-report-btn">举报</button>
+                                            <button class="discuss-delete-btn">删除</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+          document.body.appendChild(discussModal);
+
+          // 发表评论功能
+          document.getElementById('submitDiscuss').addEventListener('click', () => {
+            const text = document.getElementById('discussInput').value.trim();
+            if (text) {
+              const discussList = document.getElementById('discussList');
+              const newItem = document.createElement('div');
+              newItem.className = 'discuss-item';
+              newItem.innerHTML = `
+                                <div class="discuss-avatar">我</div>
+                                <div class="discuss-content">
+                                    <div class="discuss-header">
+                                        <div class="discuss-author">我</div>
+                                        <div class="discuss-time">${new Date().toLocaleString('zh-CN')}</div>
+                                    </div>
+                                    <div class="discuss-text">${text}</div>
+                                    <div class="discuss-actions">
+                                    <button class="discuss-reply-btn">回复</button>
+                                    <button class="discuss-report-btn">举报</button>
+                                    <button class="discuss-delete-btn">删除</button>
+                                </div>
+                                </div>
+                            `;
+              discussList.insertBefore(newItem, discussList.firstChild);
+              document.getElementById('discussInput').value = '';
+            }
+          });
+
+          // 使用事件委托处理讨论区按钮点击
+          const discussList = document.getElementById('discussList');
+
+          // 回复按钮点击事件
+          discussList.addEventListener('click', function (e) {
+            if (e.target.classList.contains('discuss-reply-btn')) {
+              const discussItem = e.target.closest('.discuss-item');
+              const author = discussItem.querySelector('.discuss-author').textContent;
+
+              // 移除已有的回复框
+              document.querySelectorAll('.reply-form').forEach(form => form.remove());
+
+              // 创建回复框
+              const replyForm = document.createElement('div');
+              replyForm.className = 'reply-form';
+              replyForm.innerHTML = `
+                                <textarea class="form-textarea" placeholder="回复 ${author}..." rows="2"></textarea>
+                                <div class="form-actions">
+                                    <button class="form-cancel reply-cancel">取消</button>
+                                    <button class="form-submit reply-submit">回复</button>
+                                </div>
+                            `;
+
+              discussItem.querySelector('.discuss-actions').after(replyForm);
+
+              // 绑定取消按钮
+              replyForm.querySelector('.reply-cancel').addEventListener('click', () => {
+                replyForm.remove();
+              });
+
+              // 绑定回复提交
+              replyForm.querySelector('.reply-submit').addEventListener('click', () => {
+                const replyText = replyForm.querySelector('textarea').value.trim();
+                if (replyText) {
+                  // 创建回复项
+                  const replyItem = document.createElement('div');
+                  replyItem.className = 'discuss-item reply-item';
+                  replyItem.innerHTML = `
+                                        <div class="discuss-avatar">我</div>
+                                        <div class="discuss-content">
+                                            <div class="discuss-header">
+                                                <div class="discuss-author">我</div>
+                                                <div class="discuss-time">${new Date().toLocaleString('zh-CN')}</div>
+                                            </div>
+                                            <div class="discuss-text">
+                                                <span class="reply-to">@${author} </span>
+                                                ${replyText}
+                                            </div>
+                                            <div class="discuss-actions">
+                                                <button class="discuss-reply-btn">回复</button>
+                                                <button class="discuss-report-btn">举报</button>
+                                                <button class="discuss-delete-btn">删除</button>
+                                            </div>
+                                        </div>
+                                    `;
+
+                  discussItem.after(replyItem);
+                  replyForm.remove();
+                }
+              });
+            }
+
+            // 举报按钮点击事件
+            if (e.target.classList.contains('discuss-report-btn')) {
+              const discussItem = e.target.closest('.discuss-item');
+              const author = discussItem.querySelector('.discuss-author').textContent;
+
+              // 自定义确认对话框
+              const confirmModal = createActionModal('确认举报', `
+                                <div class="confirm-dialog">
+                                    <p>确定要举报 ${author} 的评论吗？</p>
+                                    <div class="form-actions">
+                                        <button class="form-cancel" id="confirmCancel">取消</button>
+                                        <button class="form-submit" id="confirmReport">确认举报</button>
+                                    </div>
+                                </div>
+                            `);
+              document.body.appendChild(confirmModal);
+
+              document.getElementById('confirmCancel').addEventListener('click', () => {
+                closeActionModal(confirmModal);
+              });
+
+              document.getElementById('confirmReport').addEventListener('click', () => {
+                closeActionModal(confirmModal);
+
+                const reportModal = createActionModal('举报评论', `
+                                    <div class="report-form">
+                                        <p>请选择举报原因：</p>
+                                        <div class="report-reasons">
+                                            <label><input type="radio" name="reportReason" value="spam"> 垃圾信息</label>
+                                            <label><input type="radio" name="reportReason" value="abuse"> 辱骂攻击</label>
+                                            <label><input type="radio" name="reportReason" value="offensive"> 不良内容</label>
+                                            <label><input type="radio" name="reportReason" value="other"> 其他原因</label>
+                                        </div>
+                                        <textarea class="form-textarea" placeholder="详细说明（选填）" rows="3"></textarea>
+                                        <div class="form-actions">
+                                            <button class="form-cancel" id="reportCancel">取消</button>
+                                            <button class="form-submit" id="reportSubmit">提交举报</button>
+                                        </div>
+                                    </div>
+                                `);
+                document.body.appendChild(reportModal);
+
+                document.getElementById('reportCancel').addEventListener('click', () => {
+                  closeActionModal(reportModal);
+                });
+
+                document.getElementById('reportSubmit').addEventListener('click', () => {
+                  showNotification('举报已提交，我们会尽快处理！', 'success');
+                  closeActionModal(reportModal);
+                });
+
+                openActionModal(reportModal);
+              });
+
+              openActionModal(confirmModal);
+            }
+
+            // 删除按钮点击事件
+            if (e.target.classList.contains('discuss-delete-btn')) {
+              const discussItem = e.target.closest('.discuss-item');
+              const author = discussItem.querySelector('.discuss-author').textContent;
+
+              // 自定义确认对话框
+              const confirmModal = createActionModal('确认删除', `
+                                <div class="confirm-dialog">
+                                    <p>确定要删除这条评论吗？</p>
+                                    <div class="form-actions">
+                                        <button class="form-cancel" id="confirmCancel">取消</button>
+                                        <button class="form-submit" id="confirmDelete">删除</button>
+                                    </div>
+                                </div>
+                            `);
+              document.body.appendChild(confirmModal);
+
+              document.getElementById('confirmCancel').addEventListener('click', () => {
+                closeActionModal(confirmModal);
+              });
+
+              document.getElementById('confirmDelete').addEventListener('click', () => {
+                discussItem.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                  discussItem.remove();
+                }, 300);
+                closeActionModal(confirmModal);
+              });
+
+              openActionModal(confirmModal);
+            }
+          });
+          openActionModal(discussModal);
+          break;
+        case '上传视频':
+          const videoModal = createActionModal('上传视频', `
+                        <div class="video-upload-container">
+                            <div class="upload-area" id="uploadArea">
+                                <div class="upload-icon">📹</div>
+                                <div class="upload-text">点击或拖拽视频文件到这里</div>
+                                <div class="upload-hint">支持 MP4, WebM, AVI 格式</div>
+                                <input type="file" id="videoInput" accept="video/*" style="display:none">
+                            </div>
+                            <div class="upload-progress" id="uploadProgress" style="display:none">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" id="progressBar"></div>
+                                </div>
+                                <div class="progress-text" id="progressText">上传中... 0%</div>
+                            </div>
+                            <div class="uploaded-videos" id="uploadedVideos">
+                                <div class="video-item">
+                                    <div class="video-preview">▶</div>
+                                    <div class="video-info">
+                                        <div class="video-name">双子星公主预告片.mp4</div>
+                                        <div class="video-size">15.2 MB</div>
+                                    </div>
+                                    <div class="video-actions">
+                                        <button class="video-play-btn">播放</button>
+                                        <button class="video-delete-btn">删除</button>
+                                    </div>
+                                </div>
+                                <div class="video-item">
+                                    <div class="video-preview">▶</div>
+                                    <div class="video-info">
+                                        <div class="video-name">精彩片段集锦.mp4</div>
+                                        <div class="video-size">8.7 MB</div>
+                                    </div>
+                                    <div class="video-actions">
+                                        <button class="video-play-btn">播放</button>
+                                        <button class="video-delete-btn">删除</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+          document.body.appendChild(videoModal);
+          const uploadArea = document.getElementById('uploadArea');
+          const videoInput = document.getElementById('videoInput');
+          const uploadProgress = document.getElementById('uploadProgress');
+          const progressBar = document.getElementById('progressBar');
+          const progressText = document.getElementById('progressText');
+          const uploadedVideos = document.getElementById('uploadedVideos');
+
+          uploadArea.addEventListener('click', () => videoInput.click());
+          uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+          });
+          uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('drag-over');
+          });
+          uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('video/')) {
+              uploadVideo(file);
+            }
+          });
+          videoInput.addEventListener('change', () => {
+            const file = videoInput.files[0];
+            if (file) uploadVideo(file);
+          });
+
+          function uploadVideo(file) {
+            // 显示上传进度
+            uploadProgress.style.display = 'block';
+            let progress = 0;
+            const interval = setInterval(() => {
+              progress += 5;
+              if (progress > 100) {
+                clearInterval(interval);
+                uploadProgress.style.display = 'none';
+                addVideoToList(file);
+                return;
+              }
+              progressBar.style.width = `${progress}%`;
+              progressText.textContent = `上传中... ${progress}%`;
+            }, 200);
+          }
+
+          function addVideoToList(file) {
+            const size = (file.size / 1024 / 1024).toFixed(1);
+            const newItem = document.createElement('div');
+            newItem.className = 'video-item';
+            newItem.innerHTML = `
+                            <div class="video-preview">
+                                <video class="video-thumbnail" src="${URL.createObjectURL(file)}" muted loop></video>
+                            </div>
+                            <div class="video-info">
+                                <div class="video-name">${file.name}</div>
+                                <div class="video-size">${size} MB</div>
+                            </div>
+                            <div class="video-actions">
+                                <button class="video-play-btn">播放</button>
+                                <button class="video-delete-btn">删除</button>
+                            </div>
+                        `;
+            uploadedVideos.appendChild(newItem);
+
+            // 绑定视频操作按钮
+            bindVideoActions(newItem);
+          }
+
+          function bindVideoActions(videoItem) {
+            // 播放按钮
+            videoItem.querySelector('.video-play-btn').addEventListener('click', function () {
+              const video = videoItem.querySelector('.video-thumbnail');
+              if (video) {
+                const videoModal = createActionModal('视频播放', `
+                                    <div class="video-player-container">
+                                        <video class="video-player" controls>
+                                            <source src="${video.src}" type="video/mp4">
+                                        </video>
+                                    </div>
+                                `);
+                document.body.appendChild(videoModal);
+                openActionModal(videoModal);
+              }
+            });
+
+            // 删除按钮
+            videoItem.querySelector('.video-delete-btn').addEventListener('click', function () {
+              // 自定义确认对话框
+              const confirmModal = createActionModal('确认删除', `
+                                <div class="confirm-dialog">
+                                    <p>确定要删除这个视频吗？</p>
+                                    <div class="form-actions">
+                                        <button class="form-cancel" id="confirmCancel">取消</button>
+                                        <button class="form-submit" id="confirmDelete">删除</button>
+                                    </div>
+                                </div>
+                            `);
+              document.body.appendChild(confirmModal);
+
+              document.getElementById('confirmCancel').addEventListener('click', () => {
+                closeActionModal(confirmModal);
+              });
+
+              document.getElementById('confirmDelete').addEventListener('click', () => {
+                videoItem.remove();
+                closeActionModal(confirmModal);
+                showNotification('视频已删除', 'success');
+              });
+
+              openActionModal(confirmModal);
+            });
+          }
+
+          // 绑定现有视频的操作按钮
+          document.querySelectorAll('.video-item').forEach(item => {
+            bindVideoActions(item);
+          });
+
+          openActionModal(videoModal);
+          break;
+      }
+    }
+
+    function createActionModal(title, content) {
+      const overlay = document.createElement('div');
+      overlay.className = 'action-modal-overlay';
+      overlay.innerHTML = `
+                <div class="action-modal-content">
+                    <button class="action-modal-close">&times;</button>
+                    <h2 class="action-modal-title">${title}</h2>
+                    <div class="action-modal-body">${content}</div>
+                </div>
+            `;
+
+      overlay.querySelector('.action-modal-close').addEventListener('click', () => {
+        closeActionModal(overlay);
+      });
+
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          closeActionModal(overlay);
+        }
+      });
+
+      return overlay;
+    }
+
+    function openActionModal(modal) {
+      modal.style.display = 'flex';
+      // 保存当前滚动位置
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+      // 添加固定定位类，而不是改变overflow
+      document.body.classList.add('modal-open');
+
+      // 手动设置滚动位置，防止页面跳动
+      window.scrollTo({
+        top: scrollTop,
+        left: scrollLeft,
+        behavior: 'instant'
+      });
+    }
+
+    function closeActionModal(modal) {
+      modal.style.display = 'none';
+      // 移除固定定位类
+      document.body.classList.remove('modal-open');
+      modal.remove();
+    }
+
+    function renderGallery(data) {
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = data.map(img => `
+                <img src="${img.src}" alt="${img.alt}" class="gallery-img" data-src="${img.src}" data-alt="${img.alt}">
+            `).join('');
+
+      document.querySelectorAll('.gallery-img').forEach(img => {
+        img.addEventListener('click', () => {
+          const src = img.dataset.src;
+          const alt = img.dataset.alt;
+          const imageModalOverlay = document.getElementById('imageModalOverlay');
+          const imageViewer = document.getElementById('imageViewer');
+
+          imageModalOverlay.style.display = 'flex';
+
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+          document.body.classList.add('modal-open');
+
+          window.scrollTo({
+            top: scrollTop,
+            left: scrollLeft,
+            behavior: 'instant'
+          });
+
+          imageViewer.innerHTML = `<img src="${src}" alt="${alt}" class="full-size-img">`;
+        });
+      });
+    }
+
+    function parseContent(text) {
+      return text.replace(/\{highlight\}(.*?)\{\/highlight\}/g, '<mark class="highlight">$1</mark>');
+    }
+
+    function renderContent(data) {
+      const contentSection = document.getElementById('contentSection');
+      contentSection.innerHTML = `<div class="content-inner">${data.map(item => `
+                <p class="content-paragraph">${parseContent(item.text)}</p>
+            `).join('')}</div>`;
+    }
+
+    function initPage(data) {
+      document.getElementById('articleTitle').textContent = data.title;
+      document.getElementById('subtitle').textContent = data.subtitle;
+      document.getElementById('expandLink').textContent = data.expandText;
+      document.getElementById('expandLink').href = data.expandLink;
+
+      // 增大赞助商信息字体大小 30%
+      const sponsorLink = document.querySelector('.sponsor-link');
+      if (sponsorLink) {
+        sponsorLink.style.fontSize = '1.45rem';
+      }
+
+      renderNav(data.nav);
+      renderActions(data.actions);
+      renderGallery(data.images);
+      renderContent(data.content);
+
+      initModal(data.moreImages);
+    }
+
+    function initModal(images) {
+      const modalOverlay = document.getElementById('modalOverlay');
+      const waterfallGallery = document.getElementById('waterfallGallery');
+      let fromMoreImages = false;
+
+      function renderWaterfall(data) {
+        const maxVisible = 9;
+        const visibleImages = data.slice(0, maxVisible - 1); // 前8张
+        const hasMore = data.length > maxVisible;
+
+        let html = visibleImages.map(img => `
+                    <div class="waterfall-item">
+                        <img src="${img.src}" alt="${img.alt}" class="waterfall-img" data-src="${img.src}" data-alt="${img.alt}">
+                    </div>
+                `).join('');
+
+        // 如果超过9张，在第9个位置显示展开按钮
+        if (hasMore) {
+          html += `
+                        <div class="waterfall-item">
+                            <div class="waterfall-expand" id="waterfallExpand">
+                                <div class="waterfall-expand-icon">+</div>
+                                <div class="waterfall-expand-text">查看全部</div>
+                            </div>
+                        </div>
+                    `;
+        }
+        // 如果不足9张，渲染剩余的图片
+        else if (data.length > visibleImages.length) {
+          const remainingImages = data.slice(visibleImages.length);
+          html += remainingImages.map(img => `
+                        <div class="waterfall-item">
+                            <img src="${img.src}" alt="${img.alt}" class="waterfall-img" data-src="${img.src}" data-alt="${img.alt}">
+                        </div>
+                    `).join('');
+        }
+
+        waterfallGallery.innerHTML = html;
+
+        // 绑定图片点击事件
+        document.querySelectorAll('.waterfall-img').forEach(img => {
+          img.addEventListener('click', () => {
+            const src = img.dataset.src;
+            const alt = img.dataset.alt;
+            fromMoreImages = true;
+            openImageModal(src, alt);
+          });
+        });
+
+        // 绑定展开按钮点击事件
+        const expandBtn = document.getElementById('waterfallExpand');
+        if (expandBtn) {
+          expandBtn.addEventListener('click', () => {
+            // 渲染所有图片
+            let allHtml = data.map(img => `
+                            <div class="waterfall-item">
+                                <img src="${img.src}" alt="${img.alt}" class="waterfall-img" data-src="${img.src}" data-alt="${img.alt}">
+                            </div>
+                        `).join('');
+            waterfallGallery.innerHTML = allHtml;
+
+            // 重新绑定图片点击事件
+            document.querySelectorAll('.waterfall-img').forEach(img => {
+              img.addEventListener('click', () => {
+                const src = img.dataset.src;
+                const alt = img.dataset.alt;
+                fromMoreImages = true;
+                openImageModal(src, alt);
+              });
+            });
+          });
+        }
+      }
+
+      function openModal() {
+        const imageModalOverlay = document.getElementById('imageModalOverlay');
+        modalOverlay.style.display = 'flex';
+        imageModalOverlay.style.display = 'none';
+
+        // 保存当前滚动位置
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+        // 添加固定定位类
+        document.body.classList.add('modal-open');
+
+        // 手动设置滚动位置
+        window.scrollTo({
+          top: scrollTop,
+          left: scrollLeft,
+          behavior: 'instant'
+        });
+
+        renderWaterfall(images);
+      }
+
+      function closeModal() {
+        modalOverlay.style.display = 'none';
+        // 移除固定定位类
+        document.body.classList.remove('modal-open');
+      }
+
+      function openImageModal(src, alt) {
+        const imageModalOverlay = document.getElementById('imageModalOverlay');
+        const imageViewer = document.getElementById('imageViewer');
+        modalOverlay.style.display = 'none';
+        imageModalOverlay.style.display = 'flex';
+
+        // 保存当前滚动位置
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+        // 添加固定定位类
+        document.body.classList.add('modal-open');
+
+        // 手动设置滚动位置
+        window.scrollTo({
+          top: scrollTop,
+          left: scrollLeft,
+          behavior: 'instant'
+        });
+
+        imageViewer.innerHTML = `<img src="${src}" alt="${alt}" class="full-size-img">`;
+      }
+
+      function closeImageModal() {
+        const imageModalOverlay = document.getElementById('imageModalOverlay');
+        imageModalOverlay.style.display = 'none';
+        if (fromMoreImages) {
+          modalOverlay.style.display = 'flex';
+        } else {
+          // 移除固定定位类
+          document.body.classList.remove('modal-open');
+        }
+        fromMoreImages = false;
+      }
+
+      expandLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal();
+      });
+
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+          closeModal();
+        }
+      });
+
+      const imageModalOverlay = document.getElementById('imageModalOverlay');
+      imageModalOverlay.addEventListener('click', (e) => {
+        if (e.target === imageModalOverlay) {
+          closeImageModal();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (imageModalOverlay.style.display === 'flex') {
+            closeImageModal();
+          } else if (modalOverlay.style.display === 'flex') {
+            closeModal();
+          } else {
+            // 关闭所有action模态框
+            document.querySelectorAll('.action-modal-overlay').forEach(modal => {
+              closeActionModal(modal);
+            });
+          }
+        }
+
+        // 快捷键支持
+        if (e.ctrlKey) {
+          switch (e.key) {
+            case 'e':
+              e.preventDefault();
+              handleAction('编辑');
+              break;
+            case 'd':
+              e.preventDefault();
+              handleAction('讨论');
+              break;
+            case 'u':
+              e.preventDefault();
+              handleAction('上传视频');
+              break;
+          }
+        }
+      });
+    }
+
+    // 错误处理
+    function handleError(error, message) {
+      const errorModal = createActionModal('错误', `
+                <div class="error-message">
+                    <div class="error-icon">⚠️</div>
+                    <div class="error-text">${message}</div>
+                    <div class="error-detail">${error.message || '未知错误'}</div>
+                    <button class="form-submit" id="errorClose">确定</button>
+                </div>
+            `);
+      document.body.appendChild(errorModal);
+      document.getElementById('errorClose').addEventListener('click', () => {
+        closeActionModal(errorModal);
+      });
+      openActionModal(errorModal);
+    }
+
+    // 显示通知
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      notification.innerHTML = `
+                <div class="notification-content">${message}</div>
+            `;
+      document.body.appendChild(notification);
+
+      // 显示动画
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 10);
+
+      // 3秒后自动消失
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          notification.remove();
+        }, 300);
+      }, 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        initPage(pageData);
+      } catch (error) {
+        handleError(error, '页面初始化失败');
+      }
+    });
+  </script>
+</body>
+
+</html>

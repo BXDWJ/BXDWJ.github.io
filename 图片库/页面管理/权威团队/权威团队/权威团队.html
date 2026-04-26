@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>权威团队</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>权威团队</h1>
+            <button id="backBtn" class="back-btn">返回上一页</button>
+        </header>
+        
+        <section class="intro">
+            <h2>团队介绍</h2>
+            <p>是的，你没看错。大萌神的"权威团队"由以下精英组成：
+                            <br>                
+            
+            CEO：我（负责做梦）
+            <br>
+            CTO：我（负责熬夜写bug）
+            <br>
+            产品经理：我（负责跟我自己吵架）
+            <br>
+            UI设计师：我（负责打开Figma然后关掉）
+            <br>
+            运营总监：我（负责在群里自言自语）
+            <br>
+            测试工程师：我（负责假装没看到自己写的bug）<br>
+            团队规模：1人。<br>
+            会议效率：100%（无需对齐）。<br>
+            决策速度：秒级（自己点头就行）。<br>
+            技术栈：AI+HTML5+CSS3+JS+咖啡+红牛。<br>
+            我们（我）秉持"先上线再睡觉"的价值观，已成功服务（我自己）数万次页面刷新。投资洽谈、商务合作、技术交流请直接联系本团队唯一接线员——还是我。</p>
+        </section>
+        
+        <section class="contact">
+            <h2>联系方式</h2>
+            <ul>
+                <li>QQ：3254931***</li>
+                <li>电话：1505287****</li>
+            </ul>
+        </section>
+        
+        <section class="message">
+            <h2>留言板</h2>
+            <form id="messageForm">
+                <div class="form-group">
+                    <label for="name">姓名：</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">邮箱：</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">留言内容：</label>
+                    <textarea id="content" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">提交留言</button>
+                <button type="button" id="clearCacheBtn" class="clear-cache-btn">清除本地</button>
+            </form>
+            
+            <div id="messageList" class="message-list">
+                <h3>留言列表</h3>
+                <!-- 留言将通过JavaScript动态添加 -->
+            </div>
+        </section>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
